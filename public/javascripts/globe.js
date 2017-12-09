@@ -12,30 +12,29 @@ init();
 
 // initialize
 function init() {
-    // three.jsの設定
-    // シーンを作る
+    // three.jsの設定 シーン作成
     scene = new THREE.Scene();
+
+    //カメラ作成
+    camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
+    camera.position.set(0, 20, 100);
+    //　OrbitControlsの設定
+    controls = new THREE.OrbitControls(camera);
+    controls.autoRotate = true;
+
+    //レンダラ設定
+    render = new THREE.WebGLRenderer();
+    render.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(render.domElement);
+    //　背景設定
+    render.setClearColor(0x000000, 1)
+
 
     // ライトの設定
     var light = new THREE.PointLight(0xffffff, 1, 0, 0);
     light.position.set(0, 0, 0);
     // ライトを生成
     scene.add(light);
-
-
-    // カメラの設定
-    // camera = new THREE.PerspectiveCamera( 20, window.innerWidth /window.innerHeight, 1, 10000 );
-    // cameraRot = 0;
-    // camera.lookAt({x:0, y:0, z:0 });
-
-    camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
-    camera.position.set(0, 20, 100);
-    //　OrbitControlsの設定
-    controls = new THREE.OrbitControls(camera);
-    controls.autoRotate = true;
-    
-
-
 
     // // 太陽
     // geometrySun = new THREE.SphereGeometry(500, 64, 64);
@@ -90,10 +89,10 @@ function init() {
     //     scene.add(meshStar);
     // }
     // レンダラー
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x101010, 1.0);
-    document.body.appendChild(renderer.domElement);
+    // renderer = new THREE.WebGLRenderer();
+    // renderer.setSize(window.innerWidth, window.innerHeight);
+    // renderer.setClearColor(0x101010, 1.0);
+    // document.body.appendChild(renderer.domElement);
 
     animate();
 
@@ -123,7 +122,7 @@ function animate() {
     // camera.position.y = 0;
     // camera.lookAt({ x: meshEarth.position.x, y: meshEarth.position.y, z: meshEarth.position.z });
 
-    renderer.render(scene, camera);
+    render.render(scene, camera);
     controls.update();
-    
+
 }
