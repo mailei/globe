@@ -18,9 +18,12 @@ function init() {
     //カメラ作成
     camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.set(0, 20, 100);
+    // trackball=new THREE.TrackBallContrils(camera);
     //　OrbitControlsの設定
     controls = new THREE.OrbitControls(camera);
+    // ゆっくりさせる
     controls.autoRotate = true;
+
 
     //レンダラ設定
     render = new THREE.WebGLRenderer();
@@ -124,5 +127,6 @@ function animate() {
 
     render.render(scene, camera);
     controls.update();
+    // trackball.update();
 
 }
