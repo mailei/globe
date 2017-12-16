@@ -209,6 +209,7 @@ function datGUI() {
     "message": "setting",
     "size": 1,
     "display": true,
+    "gridHeaperDisplay":true,
     "操作": function () {
       alert("ドラッグ:グリグリ  右クリック:カメラ平行移動  ホイール:拡大縮小");
     }
@@ -218,15 +219,20 @@ function datGUI() {
   var gui = new dat.GUI();
   gui.add(text, "message");
   var saizu = gui.add(text, "size", 1, 5);
-  var hyouji = gui.add(text, "display");
+  var earthDisplay = gui.add(text, "display");
+  var sumDisplay=gui.add(text, "gridHeaperDisplay");
   gui.add(text, "操作");
 
   // 地球の表示
-  hyouji.onChange(function (value) {
+  earthDisplay.onChange(function (value) {
     if (value) meshEarth.visible = true;
-
     if (!value) meshEarth.visible = false;
   });
+  sumDisplay.onChange(function(value){
+    if (value) meshSun.visible = true;
+    if (!value) meshSun.visible = false;
+  });
+
   // 地球の大きさチェンジ
   saizu.onChange(function (value) {
     // meshEarth.scale.set(value, value, value);
@@ -235,39 +241,33 @@ function datGUI() {
 }
 
 function createStars() {
-  // // 形
-  // var geometryStar = new THREE.SphereGeometry(20, 1, 1);
-  // // マテリアル
-  // for (var i = 0; i < 0x1000; i++) {
-  //   var cl = (Math.random() * 0x1000000) & 0xff00ff;
-  //   cl = ((Math.random() * 0x20) * 0x000100) | cl;
-  //   var materialStar = new THREE.MeshBasicMaterial({ color: cl });
-  //   // 星作成
-  //   var meshStar = new THREE.Mesh(geometryStar, materialStar);
-  //   var starX = Math.random();
-  //   var starY = Math.random();
-  //   var starZ = Math.random();
+  geometryStar = new THREE.Geometry();
+  for (var i = 0; i < 10000; i++) {
+    // ランダムに位置と範囲決めるよ
+    var vesctorStar = new THREE.Vector3(Math.random() * 4000 - 1000,
+      Math.random() * 4000 - 1000,
+      Math.random() * 4000 - 1000);
+    geometryStar.vertices.push(vesctorStar);
+  }
+  for (var j = 0; j < 3; j++) {
+    //ランダムでカラーいれるよ
+    var startColor = Math.floor(Math.random() * 0x1000000 + 0xff00ff).toString(16);
+    startColor = ("000000" + startColor).slice(-6);
+    startColor = "#" + startColor;
 
-  //   if (Math.random() > 0.5) { starX *= -1; }
-  //   if (Math.random() > 0.5) { starY *= -1; }
-  //   if (Math.random() > 0.5) { starZ *= -1; }
-  //   // ベクトルの正規化
-  //   var l = Math.sqrt(starX * starX + starY * starY + starZ * starZ);
-  //   if (l != 0.0) {
-  //     x = x / l;
-  //     y = y / l;
-  //     z = z / l;
-  //   }
-  //   // ベクトルのスカラー倍
-  //   l = Math.random() * 50000 + 20000;
-  //   x = x * l;
-  //   y = y * l;
-  //   z = z * l;
-  //   meshStar.position.x = x;
-  //   meshStar.position.y = y;
-  //   meshStar.position.z = z;
-  //   scene.add(meshStar);
-  // }
+    var materialStar = new THREE.ParticleBasicMaterial({
+      color: startColor,
+      blending: THREE.AdditiveBlending,
+      transparent: true
+    });
+    // 四角形しか作れないみたい;;
+    var particleStars = new THREE.PointCloud(geometryStar, materialStar);
+    particleStars.rotation.set(
+      Math.random() * 10,
+      Math.random() * 10,
+      Math.random() * 10);
+    scene.add(particleStars);
+  }
 }
 
 // windowのリサイズイベント
@@ -286,7 +286,7 @@ function helperClass() {
   // xyz軸表示
   var axisHelper = new THREE.AxisHelper(1000);
   scene.add(axisHelper);
-  // ライトヘルパー
+  // ライトヘルパー(太陽と同位置にあるため意味ないよん)
   // var DirectionaLightHelper = new THREE.DirectionalLightHelper(DirectionaLight, 20); 
   // scene.add(DirectionaLightHelper);
 }
