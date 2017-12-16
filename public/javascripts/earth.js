@@ -66,7 +66,7 @@ function init() {
   scene.add(AmbientLight);
 
   // threeJSのヘルパークラス呼び出すよ
-  helperClass();
+  // helperClass();
   // 惑星を作るよ
   CreatePranet();
   // 星つくるよ
@@ -279,14 +279,14 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-function helperClass() {
-  // グリッド表示
-  var gridHelper = new THREE.GridHelper(1500, 100);
-  scene.add(gridHelper);
-  // xyz軸表示
-  var axisHelper = new THREE.AxisHelper(1000);
-  scene.add(axisHelper);
-  // ライトヘルパー(太陽と同位置にあるため意味ないよん)
-  // var DirectionaLightHelper = new THREE.DirectionalLightHelper(DirectionaLight, 20); 
-  // scene.add(DirectionaLightHelper);
-}
+// function helperClass() {
+//   // グリッド表示
+//   var gridHelper = new THREE.GridHelper(1500, 100);
+//   scene.add(gridHelper);
+//   // xyz軸表示
+//   var axisHelper = new THREE.AxisHelper(1000);
+//   scene.add(axisHelper);
+//   // ライトヘルパー(太陽と同位置にあるため意味ないよん)
+//   // var DirectionaLightHelper = new THREE.DirectionalLightHelper(DirectionaLight, 20); 
+//   // scene.add(DirectionaLightHelper);
+// }
