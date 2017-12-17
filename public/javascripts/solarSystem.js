@@ -143,8 +143,8 @@ function animateRender() {
 
   // 土星の位置と公転の計算だよ
   saturnRot += 0.0003;
-  meshSaturn.position.x = Math.sin(saturnRot) * 1800;
-  meshSaturn.position.z = Math.cos(saturnRot) * 1800;
+  meshSaturn.position.x = Math.sin(saturnRot) * 1900;
+  meshSaturn.position.z = Math.cos(saturnRot) * 1900;
   meshSaturn.position.y = Math.cos(saturnRot) * 80;
   meshSaturn.rotation.x = -Math.PI * (1 / 8);
   meshSaturn.rotation.y += 0.008;
