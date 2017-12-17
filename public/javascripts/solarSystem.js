@@ -1,8 +1,8 @@
+// world
 var scene;
 var camera;
 var renderer;
 var controls;
-
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -12,6 +12,9 @@ var meshMoon;
 var meshVenus;
 var meshMercury;
 var meshMars;
+var meshJupiter;
+var meshSaturn;
+var meshSaturnRing;
 
 // 公転
 var earthRot;
@@ -19,6 +22,8 @@ var moonRot;
 var venusRot;
 var mercuryRot;
 var marsRot;
+var jupiterRot;
+var saturnRot;
 
 // main
 init();
@@ -47,7 +52,7 @@ function init() {
   // controls.maxDistance = 5000;
 
   // Trackballコントロール
-  // スクロールで拡大&グリグリできるメソッド(cameraObject,element)
+  // スクロールで拡大&グリグリできるTrackballControls(cameraObject,element)
   controls = new THREE.TrackballControls(camera);
 
   //レンダラ設定
@@ -60,10 +65,10 @@ function init() {
   DirectionaLight.position.set(0, 0, 0);
   scene.add(DirectionaLight);
 
-  // ライトの設定
-  var AmbientLight = new THREE.AmbientLight(0xffffff, 1);
-  // ライトを生成
-  scene.add(AmbientLight);
+  // // ライトの設定
+  // var AmbientLight = new THREE.AmbientLight(0xffffff, 1);
+  // // ライトを生成
+  // scene.add(AmbientLight);
 
   // threeJSのヘルパークラス呼び出すよ
   // helperClass();
@@ -76,7 +81,7 @@ function init() {
 }
 
 
-// // 描画処理
+// // 固定表示描画処理
 // function render() {
 //   requestAnimationFrame(render);
 //   // カメラをアップデート
@@ -84,47 +89,70 @@ function init() {
 //   renderer.render(scene, camera);
 // }
 
-// animations処理だよ
+// animation描画処理だよ
 function animateRender() {
   // フレーム内処理
   requestAnimationFrame(animateRender);
 
-  // 地球の位置
-  earthRot += 0.001;
-  meshEarth.position.x = Math.sin(earthRot) * 1000;
-  meshEarth.position.z = Math.cos(earthRot) * 1000;
+  // 地球の位置と公転の計算だよ
+  earthRot += 0.0015;
+  meshEarth.position.x = Math.sin(earthRot) * 900;
+  meshEarth.position.z = Math.cos(earthRot) * 900;
+  // 自転計算だよ
   meshEarth.rotation.x = -Math.PI * (1 / 8);
   meshEarth.rotation.y += 0.008;
 
-  // 月の位置
+  // 月の位置と公転の計算だよ
   moonRot += 0.01;
   meshMoon.position.x = Math.sin(moonRot) * 120 + meshEarth.position.x;
   meshMoon.position.z = Math.cos(moonRot) * 120 + meshEarth.position.z;
+  // 月の裏側は見えないよ
   meshMoon.rotation.y += 0.001;
 
-  // 木星の位置
-  venusRot += 0.0015;
-  meshVenus.position.x = Math.sin(venusRot) * 700;
-  meshVenus.position.z = Math.cos(venusRot) * 700;
-  meshVenus.position.y = Math.sin(venusRot) * 30;
-  meshVenus.rotation.x = -Math.PI * (1 / 8);
-  meshVenus.rotation.y += 0.005;
-
-  // 金星の位置
-  mercuryRot += 0.002;
+  // 水星の位置と公転の計算だよ
+  mercuryRot += 0.003;
   meshMercury.position.x = Math.sin(mercuryRot) * 380;
   meshMercury.position.z = Math.cos(mercuryRot) * 380;
-  meshMercury.position.y = Math.sin(mercuryRot) * 50;
+  meshMercury.position.y = Math.sin(mercuryRot) * 60;
   meshMercury.rotation.x = -Math.PI * (1 / 8);
   meshMercury.rotation.y += 0.005;
 
-  // 火星の位置
-  marsRot += 0.0007;
+  // 金星の位置と公転の計算だよ
+  venusRot += 0.002;
+  meshVenus.position.x = Math.sin(venusRot) * 650;
+  meshVenus.position.z = Math.cos(venusRot) * 650;
+  meshVenus.position.y = Math.sin(venusRot) * -30;
+  meshVenus.rotation.x = -Math.PI * (1 / 8);
+  meshVenus.rotation.y += 0.005;
+
+  // 火星の位置と公転の計算だよ
+  marsRot += 0.00075;
   meshMars.position.x = Math.sin(marsRot) * 1200;
   meshMars.position.z = Math.cos(marsRot) * 1200;
-  meshMars.position.y = Math.sin(marsRot) * -30;
+  meshMars.position.y = Math.sin(marsRot) * 30;
   meshMars.rotation.x = -Math.PI * (1 / 8);
   meshMars.rotation.y += 0.005;
+
+  // 木星の位置と公転の計算だよ
+  jupiterRot += 0.0005;
+  meshJupiter.position.x = Math.sin(jupiterRot) * 1500;
+  meshJupiter.position.z = Math.cos(jupiterRot) * 1500;
+  meshJupiter.position.y = Math.sin(jupiterRot) * -60;
+  meshJupiter.rotation.x = -Math.PI * (1 / 8);
+  meshJupiter.rotation.y += 0.005;
+
+  // 土星の位置と公転の計算だよ
+  saturnRot += 0.0003;
+  meshSaturn.position.x = Math.sin(saturnRot) * 1800;
+  meshSaturn.position.z = Math.cos(saturnRot) * 1800;
+  meshSaturn.position.y = Math.cos(saturnRot) * 80;
+  meshSaturn.rotation.x = -Math.PI * (1 / 8);
+  meshSaturn.rotation.y += 0.008;
+  // ドーナッツの位置
+  meshSaturnRing.position.x = meshSaturn.position.x;
+  meshSaturnRing.position.z = meshSaturn.position.z;
+  meshSaturnRing.position.y = meshSaturn.position.y;
+  meshSaturnRing.rotation.x = 0.8;
 
   // カメラのコントローラーのアップデート
   controls.update();
@@ -136,7 +164,7 @@ function animateRender() {
 function CreatePranet() {
   // 地球
   //SphereGeometry(半径, 経度分割数, 緯度分割数, 開始経度, 経線中心角, 開始緯度, 緯線中心角)
-  var geometryEarth = new THREE.SphereGeometry(50, 16, 16);
+  var geometryEarth = new THREE.SphereGeometry(60, 16, 16);
   var materialEarth = new THREE.MeshBasicMaterial({
     map: THREE.ImageUtils.loadTexture('../images/earth.jpg')
   });
@@ -161,6 +189,15 @@ function CreatePranet() {
   scene.add(meshMoon);
   moonRot = 0.0;
 
+  // 水星
+  var gometryMercury = new THREE.SphereGeometry(35, 32, 32);
+  var materialMercury = new THREE.MeshBasicMaterial({
+    map: THREE.ImageUtils.loadTexture('../images/mercury.jpg')
+  });
+  meshMercury = new THREE.Mesh(gometryMercury, materialMercury);
+  scene.add(meshMercury);
+  mercuryRot = 0.0;
+
   //金星
   var geometryVenus = new THREE.SphereGeometry(50, 16, 16);
   var materialVenus = new THREE.MeshBasicMaterial({
@@ -170,17 +207,8 @@ function CreatePranet() {
   scene.add(meshVenus);
   venusRot = 0.0;
 
-  // 木星
-  var gometryMercury = new THREE.SphereGeometry(100, 32, 32);
-  var materialMercury = new THREE.MeshBasicMaterial({
-    map: THREE.ImageUtils.loadTexture('../images/mercury.jpg')
-  });
-  meshMercury = new THREE.Mesh(gometryMercury, materialMercury);
-  scene.add(meshMercury);
-  mercuryRot = 0.0;
-
   // 火星
-  var gometryMars = new THREE.SphereGeometry(30, 16, 16);
+  var gometryMars = new THREE.SphereGeometry(40, 16, 16);
   var materialMars = new THREE.MeshBasicMaterial({
     map: THREE.ImageUtils.loadTexture('../images/mars.jpg')
   });
@@ -188,8 +216,28 @@ function CreatePranet() {
   scene.add(meshMars);
   marsRot = 0.0;
 
+  // 木星
+  var gometryJupiter = new THREE.SphereGeometry(130, 32, 32);
+  var materialJupiter = new THREE.MeshBasicMaterial({
+    map: THREE.ImageUtils.loadTexture('../images/jupiter.jpg')
+  });
+  meshJupiter = new THREE.Mesh(gometryJupiter, materialJupiter);
+  scene.add(meshJupiter);
+  jupiterRot = 0.0;
+
+  // 土星
+  var gometrySaturn = new THREE.SphereGeometry(90, 32, 32);
+  var materialSaturn = new THREE.MeshBasicMaterial({
+    map: THREE.ImageUtils.loadTexture('../images/saturn.jpg')
+  });
+  meshSaturn = new THREE.Mesh(gometrySaturn, materialSaturn);
+  scene.add(meshSaturn);
+  saturnRot = 0.0;
+  // 土星のドーナッツ作る！
+  createSaturnRing();
+
   // 太陽
-  var geometrySun = new THREE.SphereGeometry(200, 128, 128);
+  var geometrySun = new THREE.SphereGeometry(250, 128, 128);
   var materialSun = new THREE.MeshBasicMaterial({
     map: THREE.ImageUtils.loadTexture('../images/sun.jpg')
   });
@@ -209,7 +257,7 @@ function datGUI() {
     "message": "setting",
     "size": 1,
     "display": true,
-    "gridHeaperDisplay":true,
+    "gridHeaperDisplay": true,
     "操作": function () {
       alert("ドラッグ:グリグリ  右クリック:カメラ平行移動  ホイール:拡大縮小");
     }
@@ -220,7 +268,7 @@ function datGUI() {
   gui.add(text, "message");
   var saizu = gui.add(text, "size", 1, 5);
   var earthDisplay = gui.add(text, "display");
-  var sumDisplay=gui.add(text, "gridHeaperDisplay");
+  var sumDisplay = gui.add(text, "gridHeaperDisplay");
   gui.add(text, "操作");
 
   // 地球の表示
@@ -228,7 +276,7 @@ function datGUI() {
     if (value) meshEarth.visible = true;
     if (!value) meshEarth.visible = false;
   });
-  sumDisplay.onChange(function(value){
+  sumDisplay.onChange(function (value) {
     if (value) meshSun.visible = true;
     if (!value) meshSun.visible = false;
   });
@@ -249,14 +297,9 @@ function createStars() {
       Math.random() * 4000 - 1000);
     geometryStar.vertices.push(vesctorStar);
   }
-  for (var j = 0; j < 3; j++) {
-    //ランダムでカラーいれるよ
-    var startColor = Math.floor(Math.random() * 0x1000000 + 0xff00ff).toString(16);
-    startColor = ("000000" + startColor).slice(-6);
-    startColor = "#" + startColor;
-
+  for (var j = 0; j < 4; j++) {
     var materialStar = new THREE.ParticleBasicMaterial({
-      color: startColor,
+      color: "#acacff",
       blending: THREE.AdditiveBlending,
       transparent: true
     });
@@ -279,6 +322,21 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
+
+function createSaturnRing() {
+  // ドーナッツ形にするよ(芯円半径、断面円半径、断面円分割、芯円分割)
+  var gometrySaturnRing = new THREE.TorusGeometry(150, 35, 2, 800);
+  // テクスチャを半透明にするよ
+  var materialSaturnRing = new THREE.MeshBasicMaterial({
+    map: THREE.ImageUtils.loadTexture('../images/saturnRing.jpg'),
+    opacity: 0.7,
+    transparent: true
+  });
+  meshSaturnRing = new THREE.Mesh(gometrySaturnRing, materialSaturnRing);
+  scene.add(meshSaturnRing);
+  saturnRingRot = 0.0;
+}
+
 // function helperClass() {
 //   // グリッド表示
 //   var gridHelper = new THREE.GridHelper(1500, 100);
