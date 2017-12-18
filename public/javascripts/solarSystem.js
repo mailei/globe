@@ -5,6 +5,7 @@ var renderer;
 var controls;
 var width = window.innerWidth;
 var height = window.innerHeight;
+var stats;
 
 //惑星
 var meshEarth;
@@ -39,7 +40,7 @@ function init() {
   width = window.innerWidth;
   height = window.innerHeight;
   camera = new THREE.PerspectiveCamera(75, width / height, 1, 5000);
-  camera.position.z = 2000;
+  camera.position.z = 2300;
   // カメラの上方向ベクトルの設定
   camera.up.set(0, 1, 0);
 
@@ -57,11 +58,13 @@ function init() {
 
   //レンダラ設定
   renderer = new THREE.WebGLRenderer();
+  renderer.shadowMapEnabled = true;
   renderer.setSize(width, height);
   document.body.appendChild(renderer.domElement);
 
   // 中心の光源
-  var DirectionaLight = new THREE.DirectionalLight(0xffffff, 1);
+  var DirectionaLight = new THREE.DirectionalLight(0xcccccc, 1.8);
+  DirectionaLight.castShadow = true;
   DirectionaLight.position.set(0, 0, 0);
   scene.add(DirectionaLight);
 
@@ -78,6 +81,8 @@ function init() {
   createStars();
   // datGUIつくるよ
   datGUI();
+  // フレームレートだすよ
+  displayStatus();
 }
 
 
@@ -156,6 +161,7 @@ function animateRender() {
 
   // カメラのコントローラーのアップデート
   controls.update();
+  stats.update();
   renderer.clear();
   renderer.render(scene, camera);
 
@@ -164,7 +170,7 @@ function animateRender() {
 function CreatePranet() {
   // 地球
   //SphereGeometry(半径, 経度分割数, 緯度分割数, 開始経度, 経線中心角, 開始緯度, 緯線中心角)
-  var geometryEarth = new THREE.SphereGeometry(60, 16, 16);
+  var geometryEarth = new THREE.SphereGeometry(60, 32, 32);
   var materialEarth = new THREE.MeshBasicMaterial({
     map: THREE.ImageUtils.loadTexture('../images/earth.jpg')
   });
@@ -173,6 +179,8 @@ function CreatePranet() {
   // meshEarth.position.x = 500;
   // meshEarth.position.y = 500;
   // meshEarth.position.z = 500;
+  meshEarth.castShadow = true;
+  meshEarth.receiveShadow = true;
   scene.add(meshEarth);
   earthRot = 0.0;
 
@@ -186,6 +194,8 @@ function CreatePranet() {
   // meshMoon.position.x = 400;
   // meshMoon.position.y = 400;
   // meshMoon.position.z = 400;
+  meshMoon.castShadow = true;
+  meshMoon.receiveShadow = true;
   scene.add(meshMoon);
   moonRot = 0.0;
 
@@ -195,6 +205,8 @@ function CreatePranet() {
     map: THREE.ImageUtils.loadTexture('../images/mercury.jpg')
   });
   meshMercury = new THREE.Mesh(gometryMercury, materialMercury);
+  meshMercury.castShadow = true;
+  meshMercury.receiveShadow = true;
   scene.add(meshMercury);
   mercuryRot = 0.0;
 
@@ -204,6 +216,8 @@ function CreatePranet() {
     map: THREE.ImageUtils.loadTexture('../images/venus.jpg')
   });
   meshVenus = new THREE.Mesh(geometryVenus, materialVenus);
+  meshVenus.castShadow = true;
+  meshVenus.receiveShadow = true;
   scene.add(meshVenus);
   venusRot = 0.0;
 
@@ -213,6 +227,8 @@ function CreatePranet() {
     map: THREE.ImageUtils.loadTexture('../images/mars.jpg')
   });
   meshMars = new THREE.Mesh(gometryMars, materialMars);
+  meshMars.castShadow = true;
+  meshMars.receiveShadow = true;
   scene.add(meshMars);
   marsRot = 0.0;
 
@@ -222,6 +238,8 @@ function CreatePranet() {
     map: THREE.ImageUtils.loadTexture('../images/jupiter.jpg')
   });
   meshJupiter = new THREE.Mesh(gometryJupiter, materialJupiter);
+  meshJupiter.castShadow = true;
+  meshJupiter.receiveShadow = true;
   scene.add(meshJupiter);
   jupiterRot = 0.0;
 
@@ -231,6 +249,8 @@ function CreatePranet() {
     map: THREE.ImageUtils.loadTexture('../images/saturn.jpg')
   });
   meshSaturn = new THREE.Mesh(gometrySaturn, materialSaturn);
+  meshSaturn.castShadow = true;
+  meshSaturn.receiveShadow = true;
   scene.add(meshSaturn);
   saturnRot = 0.0;
   // 土星のドーナッツ作る！
@@ -336,6 +356,8 @@ function createSaturnRing() {
     transparent: true
   });
   meshSaturnRing = new THREE.Mesh(gometrySaturnRing, materialSaturnRing);
+  meshSaturnRing.castShadow = true;
+  meshSaturnRing.receiveShadow = true;
   scene.add(meshSaturnRing);
   saturnRingRot = 0.0;
 }
@@ -351,3 +373,12 @@ function createSaturnRing() {
 //   // var DirectionaLightHelper = new THREE.DirectionalLightHelper(DirectionaLight, 20); 
 //   // scene.add(DirectionaLightHelper);
 // }
+
+// フレームレートだすよ
+function displayStatus() {
+  stats = new Stats();
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.top = '0px';
+  stats.domElement.style.zIndex = 100;
+  document.body.appendChild(stats.domElement);
+}
