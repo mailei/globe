@@ -100,7 +100,7 @@ function animateRender() {
   meshEarth.position.z = Math.cos(earthRot) * 900;
   // 自転計算だよ
   meshEarth.rotation.x = -Math.PI * (1 / 8);
-  meshEarth.rotation.y += 0.008;
+  meshEarth.rotation.y += 0.01;
 
   // 月の位置と公転の計算だよ
   moonRot += 0.01;
@@ -115,7 +115,7 @@ function animateRender() {
   meshMercury.position.z = Math.cos(mercuryRot) * 380;
   meshMercury.position.y = Math.sin(mercuryRot) * 60;
   meshMercury.rotation.x = -Math.PI * (1 / 8);
-  meshMercury.rotation.y += 0.005;
+  meshMercury.rotation.y += 0.0001;
 
   // 金星の位置と公転の計算だよ
   venusRot += 0.002;
@@ -123,7 +123,7 @@ function animateRender() {
   meshVenus.position.z = Math.cos(venusRot) * 650;
   meshVenus.position.y = Math.sin(venusRot) * -30;
   meshVenus.rotation.x = -Math.PI * (1 / 8);
-  meshVenus.rotation.y += 0.005;
+  meshVenus.rotation.y += 0.00005;
 
   // 火星の位置と公転の計算だよ
   marsRot += 0.00075;
@@ -131,7 +131,7 @@ function animateRender() {
   meshMars.position.z = Math.cos(marsRot) * 1200;
   meshMars.position.y = Math.sin(marsRot) * 30;
   meshMars.rotation.x = -Math.PI * (1 / 8);
-  meshMars.rotation.y += 0.005;
+  meshMars.rotation.y += 0.001;
 
   // 木星の位置と公転の計算だよ
   jupiterRot += 0.0005;
@@ -139,15 +139,15 @@ function animateRender() {
   meshJupiter.position.z = Math.cos(jupiterRot) * 1500;
   meshJupiter.position.y = Math.sin(jupiterRot) * -60;
   meshJupiter.rotation.x = -Math.PI * (1 / 8);
-  meshJupiter.rotation.y += 0.005;
+  meshJupiter.rotation.y += 0.003;
 
   // 土星の位置と公転の計算だよ
   saturnRot += 0.0003;
-  meshSaturn.position.x = Math.sin(saturnRot) * 1800;
-  meshSaturn.position.z = Math.cos(saturnRot) * 1800;
+  meshSaturn.position.x = Math.sin(saturnRot) * 1900;
+  meshSaturn.position.z = Math.cos(saturnRot) * 1900;
   meshSaturn.position.y = Math.cos(saturnRot) * 80;
   meshSaturn.rotation.x = -Math.PI * (1 / 8);
-  meshSaturn.rotation.y += 0.008;
+  meshSaturn.rotation.y += 0.003;
   // ドーナッツの位置
   meshSaturnRing.position.x = meshSaturn.position.x;
   meshSaturnRing.position.z = meshSaturn.position.z;
@@ -291,10 +291,12 @@ function datGUI() {
 function createStars() {
   geometryStar = new THREE.Geometry();
   for (var i = 0; i < 10000; i++) {
-    // ランダムに位置と範囲決めるよ
-    var vesctorStar = new THREE.Vector3(Math.random() * 4000 - 1000,
+    // ランダムに向きを決めるよ(x軸,y軸,z軸)
+    var vesctorStar = new THREE.Vector3(
       Math.random() * 4000 - 1000,
-      Math.random() * 4000 - 1000);
+      Math.random() * 4000 - 1000,
+      Math.random() * 4000 - 1000
+    );
     geometryStar.vertices.push(vesctorStar);
   }
   for (var j = 0; j < 4; j++) {
@@ -305,6 +307,7 @@ function createStars() {
     });
     // 四角形しか作れないみたい;;
     var particleStars = new THREE.PointCloud(geometryStar, materialStar);
+    // タンダムにポジションを設定
     particleStars.rotation.set(
       Math.random() * 10,
       Math.random() * 10,
