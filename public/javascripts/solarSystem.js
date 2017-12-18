@@ -32,9 +32,13 @@ animateRender();
 
 // 初期処理
 function init() {
+  //レンダラ設定
+  renderer = new THREE.WebGLRenderer();
+  renderer.shadowMapEnabled = true;
+  renderer.setSize(width, height);
+  document.body.appendChild(renderer.domElement);
   // three.jsの設定 シーン作成
   scene = new THREE.Scene();
-
   // カメラの設定
   // PerspectiveCamera(画角、アスペクト比、手前、奥行き) 
   width = window.innerWidth;
@@ -55,12 +59,6 @@ function init() {
   // Trackballコントロール
   // スクロールで拡大&グリグリできるTrackballControls(cameraObject,element)
   controls = new THREE.TrackballControls(camera);
-
-  //レンダラ設定
-  renderer = new THREE.WebGLRenderer();
-  renderer.shadowMapEnabled = true;
-  renderer.setSize(width, height);
-  document.body.appendChild(renderer.domElement);
 
   // 中心の光源
   var DirectionaLight = new THREE.DirectionalLight(0xcccccc, 1.8);
